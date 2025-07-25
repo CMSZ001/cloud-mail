@@ -69,7 +69,7 @@ jobs:
         id: deploy
         working-directory: ./mail-worker
         run: |
-          if [ -z "$D1_DATABASE_ID" ] || [ -z "$KV_NAMESPACE_ID" ] || [ -z "$R2_BUCKET_NAME" ]; then
+          if [ -z "$D1_DATABASE_ID" ] || [ -z "$KV_NAMESPACE_ID" ]; then
             echo "⚠️ Required secrets (D1_DATABASE_ID, KV_NAMESPACE_ID, or R2_BUCKET_NAME) are not set."
             echo "🟡 Skipping deployment."
             echo "deployment_skipped=true" >> $GITHUB_OUTPUT
@@ -82,7 +82,6 @@ jobs:
 
           sed -i "s|\${D1_DATABASE_ID}|${D1_DATABASE_ID}|g" "$CONFIG_FILE"
           sed -i "s|\${KV_NAMESPACE_ID}|${KV_NAMESPACE_ID}|g" "$CONFIG_FILE"
-          sed -i "s|\${R2_BUCKET_NAME}|${R2_BUCKET_NAME}|g" "$CONFIG_FILE"
 
           echo "🚀 Configuration updated. Starting deployment..."
           npx wrangler deploy -c "$CONFIG_FILE" | grep -v "https://.*\.workers\.dev" || true
